@@ -11,7 +11,7 @@ The project has two parts:
 You can control devices which already implement MQTT protocal only using the MQTT Server, the second part (MQTT Devices) is not necessary in this case.
 
 ## MQTT Server
-I have a MQTT server and a HTTP bridge for this server. The bridge is for use [IFTTT](https://ifttt.com) with Google Assistente and be able to control home devices with voice command on Android ou Google Home.
+I have a MQTT server and a HTTP bridge for this server. The bridge is for use [IFTTT](https://ifttt.com) with Google Assistente and be able to control home devices with voice command on Android or Google Home.
 
 I'm using Mosquito, it is a MQQT Server for Python.
 
