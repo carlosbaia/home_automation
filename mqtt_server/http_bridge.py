@@ -5,6 +5,7 @@ import paho.mqtt.client as mqtt
 
 mqtt_client = mqtt.Client()
 app = Flask('http_bridge')
+args = None
 
 
 def get_value(content, name, default_value=None):
@@ -15,14 +16,17 @@ def get_value(content, name, default_value=None):
 
 @app.route('/mqtt', methods = ['POST'])
 def mqtt():
-    content = request.get_json()
-    print('[MESSAGE] {}'.format(content))
-    info = mqtt_client.publish(get_value(content, 'topic'),
-                               get_value(content, 'payload'),
-                               get_value(content, 'qos', 0),
-                               get_value(content, 'retain', False))
-    print('[RESPONSE] is_published: {},  rc: {}'.format(info.is_published(), info.rc))
-    return jsonify(is_published=info.is_published(), rc=info.rc)
+    if mqtt_client.connect(args.mqtt_broker, args.mqtt_broker_port, 60) == 0:
+        content = request.get_json()
+        print('[MESSAGE] {}'.format(content))
+        info = mqtt_client.publish(get_value(content, 'topic'),
+                                   get_value(content, 'payload'),
+                                   get_value(content, 'qos', 0),
+                                   get_value(content, 'retain', False))
+        print('[RESPONSE] is_published: {},  rc: {}'.format(info.is_published(), info.rc))
+        return jsonify(status='Ok', is_published=info.is_published(), rc=info.rc)
+    print('[ERROR] Server not found!')
+    return jsonify(status='Server not found')
 
 
 if __name__ == '__main__':
