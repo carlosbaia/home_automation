@@ -17,15 +17,13 @@ I'm using Mosquito, it is a MQQT Server for Python.
 
 On Linux machines follows the steps:
 
-{% highlight ssh %}
-sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+*sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa*
 
-sudo apt-get update
+*sudo apt-get update*
 
-sudo apt-get install mosquitto
+*sudo apt-get install mosquitto*
 
-sudo apt-get install mosquitto-clients
-{% endhighlight %}
+*sudo apt-get install mosquitto-clients*
 
 
 For more details and other OS, please follow [this](http://www.steves-internet-guide.com/install-mosquitto-broker/) tutorial.
