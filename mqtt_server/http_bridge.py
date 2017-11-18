@@ -16,14 +16,13 @@ def get_value(content, name, default_value=None):
 @app.route('/mqtt', methods = ['POST'])
 def mqtt():
     content = request.get_json()
-    print('MESSAGE: {}'.format(content))
+    print('[MESSAGE] {}'.format(content))
     info = mqtt_client.publish(get_value(content, 'topic'),
                                get_value(content, 'payload'),
                                get_value(content, 'qos', 0),
                                get_value(content, 'retain', False))
-    response = jsonify(rc=info.rc, is_published=info.is_published())
-    print('RESPONSE: {}'.format(response))
-    return response
+    print('[RESPONSE] is_published: {},  rc: {}'.format(info.is_published(), info.rc))
+    return jsonify(is_published=info.is_published(), rc=info.rc)
 
 
 if __name__ == '__main__':
