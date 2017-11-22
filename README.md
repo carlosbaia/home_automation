@@ -13,7 +13,7 @@ You can control devices which already implement MQTT protocal only using the MQT
 ## MQTT Server
 I have a MQTT server and a HTTP bridge for this server. The bridge is for use [IFTTT](https://ifttt.com) with Google Assistente and be able to control home devices with voice command on Android or Google Home.
 
-I'm using Mosquito, it is a MQQT Server for Python.
+I'm using MosQuiTTo, it is a MQTT Server for Python.
 
 On Linux machines follows the steps:
 
