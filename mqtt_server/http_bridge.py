@@ -1,9 +1,8 @@
 import argparse
 from flask import Flask, request, jsonify
-import paho.mqtt.client as mqtt
+import paho.mqtt.publish as paho
 
 
-mqtt_client = mqtt.Client()
 app = Flask('http_bridge')
 args = None
 
@@ -16,28 +15,27 @@ def get_value(content, name, default_value=None):
 
 @app.route('/mqtt', methods = ['POST'])
 def mqtt():
-    if mqtt_client.connect(args.mqtt_broker, args.mqtt_broker_port, 60) == 0:
-        content = request.get_json()
-        print('[MESSAGE] {}'.format(content))
-        info = mqtt_client.publish(get_value(content, 'topic'),
-                                   get_value(content, 'payload'),
-                                   get_value(content, 'qos', 0),
-                                   get_value(content, 'retain', False))
-        print('[RESPONSE] is_published: {},  rc: {}'.format(info.is_published(), info.rc))
-        return jsonify(status='Ok', is_published=info.is_published(), rc=info.rc)
-    print('[ERROR] Server not found!')
-    return jsonify(status='Server not found')
+    content = request.get_json()
+    print('[MESSAGE] {}'.format(content))
+    try:
+        paho.single(get_value(content, 'topic'),
+                    get_value(content, 'payload'),
+                    qos=get_value(content, 'qos', 2),
+                    retain=get_value(content, 'retain', True),
+                    hostname=args.mqtt_server_ip,
+                    port=args.mqtt_server_port)
+    except Exception as ex:
+        print('[ERROR]', str(ex))
+        return jsonify(status='Error', description=str(ex))
+    print('[SUCCESS] Message published')
+    return jsonify(status='Published')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mqtt_broker', help='IP for MQTT Broker', type=str, default='127.0.0.1')
-    parser.add_argument('--mqtt_broker_port', help='Port for MQTT Broker', type=int, default=1883)
+    parser.add_argument('--mqtt_server_ip', help='IP for MQTT Server', type=str, default='0.0.0.0')
+    parser.add_argument('--mqtt_server_port', help='Port for MQTT Server', type=int, default=1883)
     args = parser.parse_args()
 
-    print('Connecting on {}:{}...'.format(args.mqtt_broker, args.mqtt_broker_port))
-    if mqtt_client.connect(args.mqtt_broker, args.mqtt_broker_port, 60) == 0:
-        app.run(debug=True, host='0.0.0.0')
-    else:
-        print('Server not found!')
-        exit(1)
+    print('Connecting on {}:{}...'.format(args.mqtt_server_ip, args.mqtt_server_port))
+    app.run(debug=True, host='0.0.0.0')
