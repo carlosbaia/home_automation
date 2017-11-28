@@ -6,7 +6,7 @@ I'm using the Message Queue Telemetry Transport (MQTT) protocol to control my Io
 
 The project has two parts:
 - **MQTT Server:** Need a machine with IP open on the internet (like Digital Ocean) to control the house remotely.
-- **MQTT Devices:** Need a machine only with internet access, like a Raspberrt PI. This one will receive commands to control stuffs like your TV, lights or another devices.
+- **MQTT Devices:** Need a machine only with internet access, like a Raspberry PI. This one will receive commands to control stuffs like your TV, lights or another devices.
 
 You can control devices which already implement MQTT protocal only using the MQTT Server, the second part (MQTT Devices) is not necessary in this case.
 
